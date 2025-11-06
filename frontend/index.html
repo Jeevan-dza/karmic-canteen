@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Karmic Solutions –karmic-canteen</title>
+    <link rel="stylesheet" href="style.css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              "primary-blue": "#2563EB",
+              "app-green": "#28a745",
+              "app-red": "#dc3545",
+              "app-yellow": "#E65100",
+            },
+          },
+        },
+      };
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  </head>
+  <body data-user-type="none">
+    <nav id="app-navbar" class="app-navbar" style="display: none">
+      <div class="navbar-container">
+        <div class="navbar-brand">
+          Karmic Canteen
+          <span class="navbar-subtitle">Reduce Food Waste</span>
+        </div>
+        <div class="navbar-menu">
+          <button class="btn btn-nav admin-only" id="nav-to-analytics">
+            📊 View Analytics
+          </button>
+          <button
+            class="btn btn-nav admin-only"
+            id="nav-back-to-orders"
+            style="display: none"
+          >
+            📋 Back to Orders
+          </button>
+
+          <button class="btn btn-nav employee-only" id="nav-to-feedback">
+            ✉️ Give Feedback
+          </button>
+          <button
+            class="btn btn-nav employee-only"
+            id="nav-back-to-menu"
+            style="display: none"
+          >
+            🍽️ Back to Menu
+          </button>
+
+          <button class="btn btn-nav btn-logout" id="logout-btn">Logout</button>
+        </div>
+      </div>
+    </nav>
+
+    <div id="login-page-container">
+      <div
+        class="min-h-screen flex items-start md:items-center justify-center p-4"
+      >
+        <div
+          class="w-full max-w-sm bg-white p-6 md:p-8 mt-10 md:mt-0 rounded-2xl shadow-2xl transition-all duration-300"
+        >
+          <div class="text-center mb-8">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="48"
+              height="48"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="w-12 h-12 mx-auto text-primary-blue mb-3"
+            >
+              <path d="M2 15s.4-1 2-1 2.6 2 4 2 4-2 4-2 1.6 1 4 1 2-1 2-1" />
+              <path d="M2 9s.4-1 2-1 2.6 2 4 2 4-2 4-2 1.6 1 4 1 2-1 2-1" />
+              <path d="M2 3s.4-1 2-1 2.6 2 4 2 4-2 4-2 1.6 1 4 1 2-1 2-1" />
+              <line x1="12" x2="12" y1="21" y2="3" />
+            </svg>
+            <h1 class="text-2xl font-bold text-gray-900">Karmic Canteen</h1>
+            <p class="mt-1 text-sm text-gray-500">
+              Sign in to help reduce food waste
+            </p>
+          </div>
+
+          <div
+            id="message-box"
+            class="hidden mt-6 p-4 rounded-xl text-sm transition-opacity duration-300"
+            role="alert"
+          >
+            <p id="message-text"></p>
+          </div>
+
+          <form id="login-form" class="space-y-4">
+            <div>
+              <label
+                class="block text-xs font-semibold text-gray-600 uppercase mb-2"
+                >Access Type</label
+              >
+              <div
+                class="flex space-x-2 bg-gray-100 p-1 rounded-xl shadow-inner"
+              >
+                <button
+                  id="employee-toggle"
+                  type="button"
+                  data-usertype="employee"
+                  class="user-toggle flex-1 py-2 px-2 text-sm font-medium rounded-lg transition-all duration-200 focus:outline-none bg-blue-600 text-white shadow-md"
+                >
+                  Employee
+                </button>
+                <button
+                  id="admin-toggle"
+                  type="button"
+                  data-usertype="admin"
+                  class="user-toggle flex-1 py-2 px-2 text-sm font-medium rounded-lg transition-all duration-200 focus:outline-none text-gray-600 hover:bg-white hover:text-blue-600"
+                >
+                  Admin
+                </button>
+              </div>
+            </div>
+
+            <div class="relative">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400"
+              >
+                <rect width="20" height="16" x="2" y="4" rx="2" />
+                <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
+              </svg>
+              <input
+                id="email-input"
+                type="email"
+                placeholder="Email (e.g., name@karmic.co.in)"
+                required
+                class="input-field w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl shadow-sm placeholder-gray-400 focus:ring-blue-500 focus:border-blue-500 transition duration-150 ease-in-out text-sm"
+              />
+            </div>
+
+            <div class="relative">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400"
+              >
+                <rect width="18" height="11" x="3" y="11" rx="2" ry="2" />
+                <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+              </svg>
+              <input
+                id="password-input"
+                type="password"
+                placeholder="Password"
+                required
+                class="input-field w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl shadow-sm placeholder-gray-400 focus:ring-blue-500 focus:border-blue-500 transition duration-150 ease-in-out text-sm"
+              />
+            </div>
+
+            <div id="employee-login-fields" class="space-y-4">
+              <div class="relative">
+                <input
+                  id="emp-id-input"
+                  type="text"
+                  placeholder="Employee ID"
+                  class="input-field w-full px-4 py-3 border border-gray-300 rounded-xl shadow-sm placeholder-gray-400 focus:ring-blue-500 focus:border-blue-500 transition duration-150 ease-in-out text-sm"
+                />
+              </div>
+              <div class="relative">
+                <input
+                  id="emp-name-input"
+                  type="text"
+                  placeholder="Employee Name"
+                  class="input-field w-full px-4 py-3 border border-gray-300 rounded-xl shadow-sm placeholder-gray-400 focus:ring-blue-500 focus:border-blue-500 transition duration-150 ease-in-out text-sm"
+                />
+              </div>
+              <div class="relative">
+                <input
+                  id="emp-mobile-input"
+                  type="tel"
+                  placeholder="Mobile Number"
+                  class="input-field w-full px-4 py-3 border border-gray-300 rounded-xl shadow-sm placeholder-gray-400 focus:ring-blue-500 focus:border-blue-500 transition duration-150 ease-in-out text-sm"
+                />
+              </div>
+              <div>
+                <label
+                  class="block text-xs font-semibold text-gray-600 uppercase mb-2"
+                  >Work Location</label
+                >
+                <select
+                  id="work-location"
+                  class="input-field w-full px-4 py-3 border border-gray-300 rounded-xl shadow-sm text-gray-700 focus:ring-blue-500 focus:border-blue-500 transition duration-150 ease-in-out text-sm"
+                >
+                  <option value="Main Office">Main Office</option>
+                  <option value="WFH">Work From Home (WFH)</option>
+                  <option value="Any other">Any other</option>
+                </select>
+              </div>
+            </div>
+            <button
+              type="submit"
+              class="w-full flex justify-center py-3 px-4 rounded-xl shadow-lg text-base font-semibold text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-500 focus:ring-opacity-50 transition duration-150 ease-in-out transform hover:scale-[1.02] active:scale-[0.99]"
+            >
+              Sign In
+            </button>
+
+            <div class="text-right">
+              <button
+                id="forgot-password-button"
+                type="button"
+                class="py-2 px-4 rounded-lg shadow-sm text-sm font-medium text-gray-700 bg-white border border-gray-300 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-200 transition duration-150 ease-in-out transform hover:scale-[1.03] active:scale-[0.99]"
+              >
+                Forgot Password?
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <div
+      class="container dashboard"
+      id="employee-dashboard"
+      style="display: none"
+    >
+      <h1 class="dashboard-title">
+        🍽️ Welcome, <span id="employee-email-display">Employee</span>!
+      </h1>
+
+      <div
+        id="employee-order-content"
+        style="text-align: left; margin-top: 20px"
+      >
+        <label for="selectedDate"><strong>Select Date: </strong></label>
+        <input type="date" id="selectedDate" />
+
+        <table>
+          <thead>
+            <tr>
+              <th>Meal</th>
+              <th>Item</th>
+              <th>Price (₹)</th>
+              <th>Quantity</th>
+            </tr>
+          </thead>
+          <tbody id="menuTable">
+            <tr>
+              <td
+                colspan="4"
+                style="text-align: center; padding: 20px; color: #777"
+              >
+                Please select a date to see the menu.
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <button id="submitOrderBtn" class="btn">Proceed to Payment</button>
+      </div>
+
+      <div id="my-orders-section">
+        <h2>My Submitted Orders</h2>
+        <p>You can cancel orders before 9:00 PM.</p>
+        <table id="myOrdersTable">
+          <thead>
+            <tr>
+              <th>Meals</th>
+              <th>Time Submitted</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="myOrdersBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="container dashboard" id="staff-dashboard" style="display: none">
+      <h1 class="dashboard-title" id="admin-header-title">
+        📋 Admin Dashboard - Meal Orders
+      </h1>
+
+      <div id="admin-orders-view">
+        <div class="summary-grid">
+          <div class="summary-card" id="card-saved">
+            <h3>♻️ Food Saved</h3>
+            <p id="foodSavedCount">0</p>
+          </div>
+          <div class="summary-card" id="card-wasted">
+            <h3>🗑️ Food Wasted</h3>
+            <p id="foodWastedCount">0</p>
+          </div>
+          <div class="summary-card" id="card-breakfast">
+            <h3>Active Breakfast</h3>
+            <p id="breakfastCount">0</p>
+          </div>
+          <div class="summary-card" id="card-lunch">
+            <h3>Active Lunch</h3>
+            <p id="lunchCount">0</p>
+          </div>
+          <div class="summary-card" id="card-snacks">
+            <h3>Active Snacks</h3>
+            <p id="snacksCount">0</p>
+          </div>
+          <div class="summary-card" id="card-dinner">
+            <h3>Active Dinner</h3>
+            <p id="dinnerCount">0</p>
+          </div>
+        </div>
+
+        <button id="clearOrders">Clear All Orders</button>
+
+        <table id="orderTable">
+          <thead>
+            <tr>
+              <th>Employee</th>
+              <th>Order For</th>
+              <th>Breakfast</th>
+              <th>Lunch</th>
+              <th>Snacks</th>
+              <th>Dinner</th>
+              <th>Submitted At</th>
+              <th>Payment</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="orderBody"></tbody>
+        </table>
+
+        <div
+          class="broadcast-section"
+          style="
+            margin-top: 30px;
+            border-top: 2px solid #f4f4f4;
+            padding-top: 20px;
+            text-align: left;
+          "
+        >
+          <h2
+            class="analytics-header"
+            style="margin-top: 0; text-align: left"
+          >
+            Broadcast Festival Notification
+          </h2>
+          <p style="font-size: 14px; color: #666; margin-bottom: 15px">
+            Send a notification to all employees (e.g., "Are you attending the
+            celebration?"). Employees will see this when they next log in.
+          </p>
+          <textarea
+            id="broadcast-message"
+            placeholder="Type your message..."
+            style="
+              width: 100%;
+              min-height: 80px;
+              box-sizing: border-box;
+              margin-bottom: 10px;
+            "
+          ></textarea>
+          <button
+            id="sendBroadcastBtn"
+            class="btn"
+            style="background: #007bff; color: white"
+          >
+            Send Notification
+          </button>
+        </div>
+      </div>
+
+      <div id="admin-analytics-view" style="display: none">
+        <h2 class="analytics-header">Overall Summary</h2>
+        <div class="analytics-summary-grid">
+          <div class="analytics-card">
+            <h3>Total Orders</h3>
+            <p id="analytics-total-orders">0</p>
+          </div>
+          <div class="analytics-card">
+            <h3>Active Orders</h3>
+            <p id="analytics-active-orders">0</p>
+          </div>
+          <div class="analytics-card">
+            <h3>Canceled Orders</h3>
+            <p id="analytics-canceled-orders">0</p>
+          </div>
+          <div class="analytics-card">
+            <h3>Unclaimed (Waste)</h3>
+            <p id="analytics-unclaimed-orders">0</p>
+          </div>
+          <div class="analytics-card">
+            <h3>Avg. Feedback Rating</h3>
+            <p id="analytics-avg-rating">N/A</p>
+          </div>
+        </div>
+
+        <h2 class="analytics-header">Order Analytics</h2>
+        <div class="analytics-chart-grid">
+          <div class="chart-container">
+            <h3>Orders Per Day</h3>
+            <canvas id="ordersPerDayChart"></canvas>
+          </div>
+          <div class="chart-container">
+            <h3>Meal Popularity (Active)</h3>
+            <canvas id="mealPopularityChart"></canvas>
+          </div>
+        </div>
+
+        <h2 class="analytics-header">Feedback Analytics</h2>
+        <div class="analytics-chart-grid-full">
+          <div class="chart-container">
+            <h3>Feedback Sentiment Over Time</h3>
+            <canvas id="feedbackSentimentChart"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container" id="feedback-container" style="display: none">
+      <h1>✉️ Canteen Feedback</h1>
+      <p>Your feedback helps us improve!</p>
+
+      <form id="feedback-form">
+        <div class="feedback-section">
+          <h2>Rate Food Quality</h2>
+          <div class="star-rating">
+            <input
+              type="radio"
+              id="food-star5"
+              name="food-rating"
+              value="5"
+            /><label for="food-star5">★</label>
+            <input
+              type="radio"
+              id="food-star4"
+              name="food-rating"
+              value="4"
+            /><label for="food-star4">★</label>
+            <input
+              type="radio"
+              id="food-star3"
+              name="food-rating"
+              value="3"
+            /><label for="food-star3">★</label>
+            <input
+              type="radio"
+              id="food-star2"
+              name="food-rating"
+              value="2"
+            /><label for="food-star2">★</label>
+            <input
+              type="radio"
+              id="food-star1"
+              name="food-rating"
+              value="1"
+            /><label for="food-star1">★</label>
+          </div>
+        </div>
+
+        <div class="feedback-section">
+          <h2>Rate Hygiene</h2>
+          <div class="star-rating">
+            <input
+              type="radio"
+              id="hygiene-star5"
+              name="hygiene-rating"
+              value="5"
+            /><label for="hygiene-star5">★</label>
+            <input
+              type="radio"
+              id="hygiene-star4"
+              name="hygiene-rating"
+              value="4"
+            /><label for="hygiene-star4">★</label>
+            <input
+              type="radio"
+              id="hygiene-star3"
+              name="hygiene-rating"
+              value="3"
+            /><label for="hygiene-star3">★</label>
+            <input
+              type="radio"
+              id="hygiene-star2"
+              name="hygiene-rating"
+              value="2"
+            /><label for="hygiene-star2">★</label>
+            <input
+              type="radio"
+              id="hygiene-star1"
+              name="hygiene-rating"
+              value="1"
+            /><label for="hygiene-star1">★</label>
+          </div>
+        </div>
+
+        <div class="feedback-section">
+          <h2>Your Feedback</h2>
+          <textarea
+            id="feedback-comments"
+            placeholder="Write your feedback here... (e.g., 'The food was great!', 'Very bad experience.')"
+          ></textarea>
+        </div>
+
+        <button type="submit" class="btn">Submit Feedback</button>
+        <a
+          href="#"
+          class="back-link"
+          id="nav-back-to-menu-hidden-link"
+          style="display: none"
+          >Back to Dashboard</a
+        >
+      </form>
+    </div>
+
+    <div
+      id="global-toast-container"
+      class="fixed bottom-5 right-5 z-50 w-full max-w-xs space-y-3"
+    ></div>
+
+    <div
+      id="payment-modal"
+      class="hidden fixed inset-0 z-40 flex items-center justify-center p-4"
+    >
+      <div class="absolute inset-0 bg-black/60"></div>
+      <div
+        class="relative z-50 w-full max-w-md transform-gpu rounded-2xl bg-white p-6 text-center shadow-2xl transition-all"
+      >
+        <h3 class="text-2xl font-bold text-gray-900">Complete Your Payment</h3>
+        <p class="mt-2 text-sm text-gray-500">
+          Scan the QR code or use the UPI ID below.
+        </p>
+
+        <div class="my-6 flex flex-col items-center justify-center space-y-4">
+          <img
+            id="modal-qr-code"
+            src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=upi://pay?pa=karmic-canteen@upi"
+            alt="UPI QR Code"
+            class="h-48 w-48 rounded-lg border-4 border-gray-200"
+          />
+          <div class="text-left">
+            <p class="font-semibold text-gray-700">
+              UPI ID:
+              <strong class="select-all font-mono text-blue-600"
+                >karmic-canteen@upi</strong
+              >
+            </p>
+            <p class="mt-1 text-2xl font-bold text-gray-900">
+              Total Amount: ₹<span id="modal-total-amount">0.00</span>
+            </p>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <button
+            id="modal-cancel-btn"
+            type="button"
+            class="w-full rounded-lg bg-gray-200 py-3 text-sm font-semibold text-gray-800 transition hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400"
+          >
+            Cancel
+          </button>
+          <button
+            id="modal-pay-btn"
+            type="button"
+            class="w-full rounded-lg bg-green-600 py-3 text-sm font-semibold text-white transition hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500"
+          >
+            Mark as Paid
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <script src="app.js"></script>
+  </body>
+</html>

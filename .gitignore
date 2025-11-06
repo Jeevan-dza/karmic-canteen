@@ -1,0 +1,30 @@
+# === Node.js dependencies ===
+node_modules/
+npm-debug.log
+yarn-debug.log
+yarn-error.log
+
+# === Environment files (contains secrets) ===
+.env
+
+# === Build and dist folders (for frontend) ===
+dist/
+build/
+
+# === Logs ===
+logs/
+*.log
+
+# === System files ===
+.DS_Store
+Thumbs.db
+
+# === VS Code settings ===
+.vscode/
+
+# === Temporary files ===
+*.tmp
+*.swp
+
+# === Screenshots or media ===
+ScreenShots/
