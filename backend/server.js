@@ -4,7 +4,7 @@ import connectDB from './config/db.js';
 import cors from 'cors'; // <-- 1. IMPORT CORS
 
 // Import cron jobs to ensure they are scheduled
-import './cronJobs.js'; 
+import './jobs/cronJobs.js'; 
 
 // Import routes
 import authRoutes from './routes/auths.js';
