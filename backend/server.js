@@ -1,9 +1,10 @@
 // server.js
-import express from 'express';
-import dotenv from 'dotenv';
-import connectDB from './db.js';
-import cors from 'cors';
-import './cronJobs.js'; // Schedules all jobs automatically
+import express from "express";
+import dotenv from "dotenv";
+import connectDB from "./config/db.js";
+import cors from "cors";
+import "./jobs/cronJobs.js";
+// Schedules all jobs automatically
 
 dotenv.config();
 
@@ -26,8 +27,8 @@ app.use(cors());
 // app.use('/api/broadcasts', broadcastRoutes);
 
 // Root test route
-app.get('/', (req, res) => {
-  res.send('✅ Karmic Canteen Backend is Running Successfully!');
+app.get("/", (req, res) => {
+  res.send("✅ Karmic Canteen Backend is Running Successfully!");
 });
 
 // Dynamic port for deployment
