@@ -10,7 +10,7 @@ import './jobs/cronJobs.js';
 import authRoutes from './routes/auths.js';
 import orderRoutes from './routes/orders.js';
 import feedbackRoutes from './routes/feedback.js';
-import broadcastRoutes from './routes/Broadcast.js';
+import broadcastRoutes from './routes/boardcast.js';
 
 
 // Load environment variables
