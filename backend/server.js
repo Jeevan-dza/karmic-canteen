@@ -1,6 +1,6 @@
 import express from 'express';
 import dotenv from 'dotenv';
-import connectDB from './db.js';
+import connectDB from './config/db.js';
 import cors from 'cors'; // <-- 1. IMPORT CORS
 
 // Import cron jobs to ensure they are scheduled
@@ -11,10 +11,7 @@ import authRoutes from './routes/auths.js';
 import orderRoutes from './routes/orders.js';
 import feedbackRoutes from './routes/feedback.js';
 import broadcastRoutes from './routes/broadcast.js';
-import connectDB from './config/db.js';
-import dotenv from 'dotenv';
-import express from 'express';
-import cors from 'cors';
+
 
 // Load environment variables
 dotenv.config();
