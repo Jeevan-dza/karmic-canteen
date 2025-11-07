@@ -1,4 +1,6 @@
 // server.js
+import mongoose from "mongoose";
+dotenv.config();  // <-- this line must be at the top
 import express from "express";
 import dotenv from "dotenv";
 import connectDB from "./config/db.js";
