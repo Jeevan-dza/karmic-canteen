@@ -1,3 +1,4 @@
+// Boardcast.js
 import mongoose from 'mongoose';
 
 const BroadcastSchema = new mongoose.Schema({
@@ -6,4 +7,4 @@ const BroadcastSchema = new mongoose.Schema({
   date: { type: Date, default: Date.now },
 });
 
-export default mongoose.model('Broadcast', BroadcastSchema);
+export default mongoose.models.Broadcast || mongoose.model('Broadcast', BroadcastSchema);

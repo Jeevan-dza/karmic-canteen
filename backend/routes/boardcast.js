@@ -1,5 +1,5 @@
 import express from 'express';
-import Broadcast from '../models/Broadcast.js';
+import Broadcast from '../models/Boardcast.js';
 import User from '../models/user.js';
 import { protect, admin } from '../middleware/auth.js';
 import { sendEmail } from '../utils/email.js';

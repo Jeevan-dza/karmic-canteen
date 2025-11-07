@@ -1,3 +1,4 @@
+// Feedback.js
 import mongoose from 'mongoose';
 
 const FeedbackSchema = new mongoose.Schema({
@@ -9,4 +10,4 @@ const FeedbackSchema = new mongoose.Schema({
   date: { type: Date, default: Date.now },
 });
 
-export default mongoose.model('Feedback', FeedbackSchema);
+export default mongoose.models.Feedback || mongoose.model('Feedback', FeedbackSchema);

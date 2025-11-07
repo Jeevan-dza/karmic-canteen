@@ -1,36 +1,35 @@
+// server.js
 import express from 'express';
 import dotenv from 'dotenv';
-import connectDB from './config/db.js';
-import cors from 'cors'; // <-- 1. IMPORT CORS
+import connectDB from './db.js';
+import cors from 'cors';
+import './cronJobs.js'; // Schedules all jobs automatically
 
-// Import cron jobs to ensure they are scheduled
-import './jobs/cronJobs.js'; 
-
-// Import routes
-import authRoutes from './routes/auths.js';
-import orderRoutes from './routes/orders.js';
-import feedbackRoutes from './routes/feedback.js';
-import broadcastRoutes from './routes/boardcast.js';
-
-
-// Load environment variables
 dotenv.config();
 
-// Connect to database
+// Connect to MongoDB
 connectDB();
 
 const app = express();
-
-// Init middleware
 app.use(express.json());
-app.use(cors()); // <-- 2. ENABLE CORS FOR ALL REQUESTS
+app.use(cors());
 
-// Define routes
-app.use('/api/auth', authRoutes);
-app.use('/api/orders', orderRoutes);
-app.use('/api/feedback', feedbackRoutes);
-app.use('/api/broadcasts', broadcastRoutes);
+// 🧠 Routes (temporarily commented out if you don’t have routes folder yet)
+// import authRoutes from './routes/auth.js';
+// import orderRoutes from './routes/order.js';
+// import feedbackRoutes from './routes/feedback.js';
+// import broadcastRoutes from './routes/broadcast.js';
 
+// app.use('/api/auth', authRoutes);
+// app.use('/api/orders', orderRoutes);
+// app.use('/api/feedback', feedbackRoutes);
+// app.use('/api/broadcasts', broadcastRoutes);
+
+// Root test route
+app.get('/', (req, res) => {
+  res.send('✅ Karmic Canteen Backend is Running Successfully!');
+});
+
+// Dynamic port for deployment
 const PORT = process.env.PORT || 5000;
-
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
